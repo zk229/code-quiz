@@ -4,6 +4,7 @@ var choiceEl = document.querySelector("#answer-choices");
 var previousEl = document.querySelector("#previous");
 var highScore = 9999;
 var numComplete = 0;
+var score = 0;
 var questions = [
     "Which of the following is NOT a primitive data type in Java?",
     "Which of these tools is used for version control?",
@@ -13,7 +14,7 @@ var questions = [
 ];
 var answers = [
     ["String", "boolean", "int", "char"],
-    ["CSS", "Angular", "Node.js", "CSS"],
+    ["CSS", "Angular", "Node.js", "Git"],
     ["CSS", "HTML", "Javascript", "Python"],
     ["String", "Boolean", "Integer", "Float"],
     ["JSON.stringify", "JSON.parse", "JSON.toString", "JSON.parseInt"]
@@ -21,6 +22,7 @@ var answers = [
 var correct = [1, 4, 1, 2, 1];
 var numQuestions = questions.length;
 
+// start the quizs
 var startButtonHandler = function(event) {
     loadQuestion(0);
     numComplete++;
@@ -28,6 +30,7 @@ var startButtonHandler = function(event) {
     event.target.remove();
 };
 
+// load the next question
 var loadQuestion = function(num) {
     document.querySelector("#question").innerHTML = questions[num];
 
@@ -37,11 +40,12 @@ var loadQuestion = function(num) {
 
     for(var i = 0; i < answers[num].length; i++) {
         var newButton = makeButton(i + 1, answers[num][i]);
-        newButton.setAttribute("data-question-num", i);
+        newButton.setAttribute("data-question-num", num);
         choiceEl.appendChild(newButton);
     }
 };
 
+// make an answer choice button
 var makeButton = function(num, answer) {
     var newButton = document.createElement("button");
     newButton.className = "btn choice";
@@ -50,13 +54,9 @@ var makeButton = function(num, answer) {
     return newButton;
 };
 
+// handle event when an answer choice is clicked
 var answerChoiceHandler = function(event) {
-    console.log(event.target);
-
     var answerId = event.target.getAttribute("data-choice");
-
-    console.log(answerId);
-
     var answerSelected = document.querySelector(".choice[data-choice='" + answerId + "']");
 
     if(!answerSelected) {
@@ -72,9 +72,24 @@ var answerChoiceHandler = function(event) {
     else {
         previousEl.innerHTML = "Incorrect!";
         previousEl.setAttribute("color", "red");
+        score += 10;
     }
 
-    loadQuestion(parseInt(answerSelected.getAttribute("data-choice")) + 1);
+    if(parseInt(prevQuestion) === numQuestions - 1) {
+        showScore();
+        return true;
+    }
+
+    loadQuestion(parseInt(answerSelected.getAttribute("data-question-num")) + 1);
+};
+
+// end the quiz
+var showScore = function() {
+    document.querySelector("#question").innerHTML = "This quiz is over! Your score is " + score;
+
+    while(choiceEl.firstChild) {
+        choiceEl.firstChild.remove();
+    }
 };
 
 startButtonEl.addEventListener("click", startButtonHandler);

@@ -11,6 +11,7 @@ header {
     color: white;
     border-radius: 4px;
     font-size: 24px;
+    padding: 10px;
 }
 
 .body {
@@ -27,5 +28,11 @@ header {
 
 #answer-choices {
     display: flex;
-    justify-content: space-around;
+    flex-wrap: wrap;
+    justify-content: space-between;
+    font-size: 20px;
+}
+.choice {
+    flex: 0 0 100%;
+    margin: 15px;
 }
