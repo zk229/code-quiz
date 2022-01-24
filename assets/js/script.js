@@ -5,7 +5,7 @@ var previousEl = document.querySelector("#previous");
 var timerEl = document.querySelector(".timer");
 var highScore = 9999;
 var numComplete = 0;
-var score = 0;
+var score = 30;
 var questions = [
     "Which of the following is NOT a primitive data type in Java?",
     "Which of these tools is used for version control?",
@@ -75,18 +75,22 @@ var answerChoiceHandler = function(event) {
     else {
         previousEl.innerHTML = "Incorrect!";
         previousEl.setAttribute("color", "red");
-        score += 10;
+        score -= 10;
     }
 
     if(parseInt(prevQuestion) === numQuestions - 1) {
         showScore();
         return true;
     }
+    if(score < 0) {
+        gameOver();
+        return true;
+    }
 
     loadQuestion(parseInt(answerSelected.getAttribute("data-question-num")) + 1);
 };
 
-// end the quiz
+// end the quiz if all questions are answered
 var showScore = function() {
     document.querySelector("#question").innerHTML = "This quiz is over! Your score is " + score;
     isGoing = false;
@@ -95,13 +99,47 @@ var showScore = function() {
     while(choiceEl.firstChild) {
         choiceEl.firstChild.remove();
     }
+
+    var highScoreDiv = document.createElement("div");
+    highScoreDiv.setAttribute("display", "flex");
+    highScoreDiv.setAttribute("justify-content", "space-between");
+    highScoreDiv.setAttribute("margin", "auto");
+    highScoreDiv.setAttribute("width", "100%");
+
+    var inputEl = document.createElement("input");
+    inputEl.setAttribute("type", "text");
+    inputEl.setAttribute("name", "name");
+    inputEl.setAttribute("placeholder", "Enter your initials");
+    inputEl.setAttribute("width", "60%");
+
+    var submitButton = document.createElement("button");
+    submitButton.className = "btn";
+    submitButton.setAttribute("type", "submit");
+    submitButton.textContent = "Submit";
+    submitButton.setAttribute("width", "30%");
+
+    highScoreDiv.appendChild(inputEl);
+    highScoreDiv.appendChild(submitButton);
+    choiceEl.appendChild(highScoreDiv);
 };
 
+// end the quiz if time runs out
+var gameOver = function() {
+    document.querySelector("#question").innerHTML = "This quiz is over! You did not complete the quiz... 😭";
+    isGoing = false;
+    console.log(isGoing);
+
+    while(choiceEl.firstChild) {
+        choiceEl.firstChild.remove();
+    }
+};
+
+// constantly update the timer
 var updateTimer = function() {
     if(isGoing) {
-        score++;
-        timerEl.innerHTML = "Time: " + score;
+        score--;
     }
+    timerEl.innerHTML = "Time: " + score;
 }
 
 setInterval(updateTimer, 1000);
