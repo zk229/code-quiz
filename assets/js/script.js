@@ -3,6 +3,8 @@ var bodyEl = document.querySelector(".body");
 var choiceEl = document.querySelector("#answer-choices");
 var previousEl = document.querySelector("#previous");
 var timerEl = document.querySelector(".timer");
+var highScoreEl = document.querySelector("#high-score-btn");
+
 var numComplete = 0;
 var score = 30;
 var questions = [
@@ -181,6 +183,11 @@ var updateTimer = function() {
     }
     timerEl.innerHTML = "Time: " + score;
 }
+
+// to be implemented
+var showHighScore = function() {
+    return false;
+};
 
 setInterval(updateTimer, 1000);
 startButtonEl.addEventListener("click", startButtonHandler);
