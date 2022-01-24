@@ -2,6 +2,7 @@ var startButtonEl = document.querySelector("#start-btn");
 var bodyEl = document.querySelector(".body");
 var choiceEl = document.querySelector("#answer-choices");
 var previousEl = document.querySelector("#previous");
+var timerEl = document.querySelector(".timer");
 var highScore = 9999;
 var numComplete = 0;
 var score = 0;
@@ -21,11 +22,13 @@ var answers = [
 ];
 var correct = [1, 4, 1, 2, 1];
 var numQuestions = questions.length;
+var isGoing = false;
 
 // start the quizs
 var startButtonHandler = function(event) {
     loadQuestion(0);
     numComplete++;
+    isGoing = true;
     
     event.target.remove();
 };
@@ -86,11 +89,21 @@ var answerChoiceHandler = function(event) {
 // end the quiz
 var showScore = function() {
     document.querySelector("#question").innerHTML = "This quiz is over! Your score is " + score;
+    isGoing = false;
+    console.log(isGoing);
 
     while(choiceEl.firstChild) {
         choiceEl.firstChild.remove();
     }
 };
 
+var updateTimer = function() {
+    if(isGoing) {
+        score++;
+        timerEl.innerHTML = "Time: " + score;
+    }
+}
+
+setInterval(updateTimer, 1000);
 startButtonEl.addEventListener("click", startButtonHandler);
 choiceEl.addEventListener("click", answerChoiceHandler);
