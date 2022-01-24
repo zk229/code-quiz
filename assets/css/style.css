@@ -1,0 +1,31 @@
+header {
+    display: flex;
+    justify-content: space-between;
+}
+.timer {
+    padding-right: 50px;
+    font-size: 24px;
+}
+.btn {
+    background-color: purple;
+    color: white;
+    border-radius: 4px;
+    font-size: 24px;
+}
+
+.body {
+    text-align: center;
+    width: 50%;
+    margin: auto;
+}
+.body h2 {
+    font-size: 36px;
+}
+.body p {
+    font-size: 24px;
+}
+
+#answer-choices {
+    display: flex;
+    justify-content: space-around;
+}
