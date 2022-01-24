@@ -22,8 +22,10 @@ header {
 .body h2 {
     font-size: 36px;
 }
-.body p {
+p {
     font-size: 24px;
+    text-align: center;
+    margin: auto;
 }
 
 #answer-choices {

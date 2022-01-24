@@ -3,7 +3,6 @@ var bodyEl = document.querySelector(".body");
 var choiceEl = document.querySelector("#answer-choices");
 var previousEl = document.querySelector("#previous");
 var timerEl = document.querySelector(".timer");
-var highScore = 9999;
 var numComplete = 0;
 var score = 30;
 var questions = [
@@ -118,6 +117,8 @@ var showScore = function() {
     submitButton.textContent = "Submit";
     submitButton.setAttribute("width", "30%");
 
+    console.log(submitButton);
+
     highScoreDiv.appendChild(inputEl);
     highScoreDiv.appendChild(submitButton);
     choiceEl.appendChild(highScoreDiv);
@@ -134,6 +135,45 @@ var gameOver = function() {
     }
 };
 
+// handle submission of initials
+var submitButtonHandler = function(event) {
+    event.preventDefault();
+
+    console.log(event.target);
+
+    if(event.target.textContent !== "Submit") {
+        return false;
+    }
+
+    var initials = document.querySelector("input").value;
+    var highScore = localStorage.getItem("high-score");
+    var highInitials = localStorage.getItem("initials");
+    if(!highScore) {
+        highScore = 0;
+        highInitials = "";
+    }
+
+    if(score > parseInt(highScore)) {
+        document.querySelector("#question").innerHTML = "Congratulations! New high score!";
+        localStorage.setItem("high-score", score);
+        localStorage.setItem("initials", initials);
+        highScore = score;
+        highInitials = initials;
+    }
+    else {
+        document.querySelector("#question").innerHTML = "You were close, but not quite a high score";
+    }
+
+    while(choiceEl.firstChild) {
+        choiceEl.firstChild.remove();
+    }
+
+    var highScoreEl = document.createElement("p");
+    highScoreEl.innerHTML = "High score is " + highScore + " by " + highInitials;
+    choiceEl.appendChild(highScoreEl);
+    previousEl.innerHTML = "";
+};
+
 // constantly update the timer
 var updateTimer = function() {
     if(isGoing) {
@@ -145,3 +185,4 @@ var updateTimer = function() {
 setInterval(updateTimer, 1000);
 startButtonEl.addEventListener("click", startButtonHandler);
 choiceEl.addEventListener("click", answerChoiceHandler);
+choiceEl.addEventListener("click", submitButtonHandler);
